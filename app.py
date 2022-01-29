@@ -1,5 +1,6 @@
 from distutils.log import debug
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, session, redirect
+from flask_sqlalchemy import SQLAlchemy
 import urllib.request
 import urllib.parse
 import setBrueprint
@@ -12,6 +13,9 @@ app = Flask(__name__, static_folder="assets")
 
 app.register_blueprint(setBrueprint.static)
 app.register_blueprint(setBrueprint.img)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///memo.db'
+db = SQLAlchemy(app)
 
 AUTH0_CLIENT_ID = 'bc9VXejShx5SNXHgw6C8vEjAe0NDIdS0'
 AUTH0_CLIENT_SECRET = 'AjVILJrIhfqfMz2-k_ptfNBiNYz-sAtGkmvwYZo0i-gPoOVvjP7sndD5T-lHp-Ko'
@@ -33,6 +37,11 @@ auth0 = oauth.remote_app(
     access_token_url='/oauth/token',
     authorize_url='/authorize',
 )
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
 @app.route("/")
 def index():
@@ -61,34 +70,36 @@ def auth_callback():
         return 'something wrong', 403  # 署名がおかしい。
 
     # flaskのSessionを使ってcookieにユーザーデータを保存。
-    Flask.session['profile'] = {
+    session['profile'] = {
         'id': payload['sub'],
         'name': payload['name'],
         'picture': payload['picture'],
     }
 
     # マイページに飛ばす。
-    return Flask.redirect(url_for('mypage'))
+    return redirect(url_for('mypage'))
 
 @app.route('/mypage')
 def mypage():
-    if 'profile' not in Flask.session:
-        return Flask.redirect(Flask.url_for('login'))
+    if 'profile' not in session:
+        return redirect(url_for('login'))
 
-    return '''
-        <img src="{picture}"><br>
-        name: <b>{name}</b><br>
-        ID: <b>{id}</b><br>
-        <br>
-        <a href="/">back to top</a>
-    '''.format(**Flask.session['profile'])
+    return render_template("mypage.html").format(**session['profile'])
 
 @app.route('/logout')
 def logout():
-    del Flask.session['profile']
+    del session['profile']
 
-    params = {'returnTo': Flask.url_for('index', _external=True), 'client_id': AUTH0_CLIENT_ID}
-    return Flask.redirect(auth0.base_url + '/v2/logout?' + urllib.parse.urlencode(params))
+    params = {'returnTo': url_for('index', _external=True), 'client_id': AUTH0_CLIENT_ID}
+    return redirect(auth0.base_url + '/v2/logout?' + urllib.parse.urlencode(params))
+
+@app.route('/home')
+def home():
+    if 'profile' in session:
+        return render_template("home.html").format(**session['profile'])
+    else:
+        return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
