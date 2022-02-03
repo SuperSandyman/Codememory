@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block header %}
 <header>
@@ -20,7 +20,7 @@
                 </ul>
                 <ul class="navbar-nav mr-auto mb-2 mb-xl-0">
                     <li class="nav-item">
-                        <a href="/logout" class="btn btn-danger">Logout</a>
+                        <a href="/logout" class="btn btn-primary">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -31,21 +31,17 @@
 
 {% block content %}
 <div class="container">
-    <br>
-    {% for post in posts %}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <div class="column flex-direction:row">
-                <h5 class="card-title">{{ post.title }}</h5>
-                <br>
-                <a href="#" class="btn btn-primary">詳細を見る</a>
-                <a href="#" class="btn btn-success">編集・削除</a>
-            </div>
-        </div>
-    </div>
-    <br>
-    {% endfor %}
-    <br>
-    <a href="/edit" class="btn btn-primary">メモを作成</a>
+    <form action="/home" method="POST">
+        <br>
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" name="title" id="formControlInput" placeholder="Hello, World!">
+        <br>
+        <textarea name="detail"></textarea>
+        <script>
+        var easyMDE = new EasyMDE();
+        </script>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Create">
+    </form>
 </div>
 {% endblock %}

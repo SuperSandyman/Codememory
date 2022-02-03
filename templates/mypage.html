@@ -1,8 +1,37 @@
 {% extends "base.html" %}
+
+{% block header %}
+<header>
+    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">Codememory</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic" aria-controls="navbarBasic" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBasic">
+                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/mypage">Mypage</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/about">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-auto mb-2 mb-xl-0">
+                    <li class="nav-item">
+                        <a href="/logout" class="btn btn-primary">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
 {% block content %}
 <img src="{picture}">
-    <br>name: <b>{name}</b>
-    <br>ID: <b>{id}</b><br>
-    <br>
-    <a href="/home">back to top</a>
+<br>name: <b>{name}</b>
+<br>ID: <b>{id}</b><br>
+<br>
 {% endblock %}

@@ -1,5 +1,5 @@
 from distutils.log import debug
-from flask import Flask, render_template, url_for, session, redirect
+from flask import Flask, render_template, url_for, session, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 import urllib.request
 import urllib.parse
@@ -40,8 +40,8 @@ auth0 = oauth.remote_app(
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    title = db.Column(db.String(50), nullable=False)
+    detail = db.Column(db.String(300000))
 
 @app.route("/")
 def index():
@@ -77,7 +77,7 @@ def auth_callback():
     }
 
     # マイページに飛ばす。
-    return redirect(url_for('mypage'))
+    return redirect(url_for('home'))
 
 @app.route('/mypage')
 def mypage():
@@ -93,13 +93,32 @@ def logout():
     params = {'returnTo': url_for('index', _external=True), 'client_id': AUTH0_CLIENT_ID}
     return redirect(auth0.base_url + '/v2/logout?' + urllib.parse.urlencode(params))
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
     if 'profile' in session:
-        return render_template("home.html").format(**session['profile'])
+        if request.method == 'GET':
+            posts = Post.query.all()
+            return render_template('home.html', posts=posts).format(**session['profile'])     
+
+        if request.method == 'POST':
+            title = request.form.get('title')
+            detail = request.form.get('detail')
+
+            new_post = Post(title=title, detail=detail)
+
+            db.session.add(new_post)
+            db.session.commit()
+            return redirect('/home')
+
     else:
         return redirect(url_for('login'))
-
+    
+@app.route('/edit')
+def edit():
+    if 'profile' in session:
+        return render_template("edit.html").format(**session['profile'])
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
