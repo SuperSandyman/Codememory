@@ -29,14 +29,33 @@
 
 {% block content %}
 <div class="container">
-    <div class="center">
-        <br>
-        <p><img src="{picture}" class="trim-image-to-circle flex"></p>
-        <ul class="list">
-            <li>UserName: {name}</li>
-            <li>ID: {id}</li>
-        </ul>
+    <br>
+    <div class="card w-50 mb-3" style="margin: auto;">
+        <div class="card-body">
+            <h2 class="card-title">{{ post.title }}</h2>
+            <p>--------------------------</p>
+            <div id="detail"></div>
+            <script>
+                var markdown = {{ post.detail| tojson }};
+                document.getElementById('detail').innerHTML =
+                    marked.parse(markdown);
+            </script>
+            <style src='/static/markdown.css'></style>
+            <p>--------------------------</p>
+            <a class="btn btn-success" href="/home">戻る</a>
+        </div>
     </div>
-
 </div>
+<!-- <div class="container">
+    <br>
+    <h3>{{ post.title }}</h3>
+    <br>
+    <div class="border container" id="detail" style="/static/markdown.css"></div>
+    <script>
+        var markdown = {{ post.detail| tojson }};
+        document.getElementById('detail').innerHTML =
+            marked.parse(markdown);
+    </script>
+    <style src='/static/markdown.css'></style>
+</div> -->
 {% endblock %}

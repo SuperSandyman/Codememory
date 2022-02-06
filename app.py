@@ -119,6 +119,42 @@ def edit():
         return render_template("edit.html").format(**session['profile'])
     else:
         return redirect(url_for('login'))
+    
+@app.route('/detail/<int:id>')
+def read(id):
+    if 'profile' in session:
+        post = Post.query.get(id)
+        return render_template("/detail.html", post=post).format(**session['profile'])
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    if 'profile' in session:
+        post = Post.query.get(id)
+        
+        db.session.delete(post)
+        db.session.commit()
+        return redirect('/home')
+    else:
+        return redirect(url_for('login'))
+    
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update(id):
+    if 'profile' in session:
+        post = Post.query.get(id)
+
+        if request.method == 'GET':
+            return render_template('update.html', post=post)
+        
+        if request.method == 'POST':
+            post.title = request.form.get('title')
+            post.detail = request.form.get('detail')
+            db.session.commit()
+            return redirect('/home')
+    
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block header %}
 <header>
@@ -29,14 +29,17 @@
 
 {% block content %}
 <div class="container">
-    <div class="center">
+    <form action="/update/{{ post.id }}" method="POST">
         <br>
-        <p><img src="{picture}" class="trim-image-to-circle flex"></p>
-        <ul class="list">
-            <li>UserName: {name}</li>
-            <li>ID: {id}</li>
-        </ul>
-    </div>
-
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" name="title" id="formControlInput" value={{ post.title }}>
+        <br>
+        <textarea name="detail">{{ post.detail }}</textarea>
+        <script>
+            var easyMDE = new EasyMDE();
+        </script>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Change">
+    </form>
 </div>
 {% endblock %}
