@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block header %}
+<header>
+    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">Codememory</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic"
+                aria-controls="navbarBasic" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBasic">
+                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/mypage">Mypage</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-auto mb-2 mb-xl-0">
+                    <li class="nav-item">
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for post in posts %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div>
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <br>
+                        <a href="/detail/{{ post.id }}" class="btn btn-primary">詳細</a>
+                        <a href="/update/{{ post.id }}" class="btn btn-success">編集</a>
+                        <a href="/delete/{{ post.id }}" class="btn btn-danger">削除</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+    <a href="/edit" class="btn btn-primary">メモを作成</a>
+</div>
+{% endblock %}

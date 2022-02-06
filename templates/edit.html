@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header>
+    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">Codememory</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic"
+                aria-controls="navbarBasic" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarBasic">
+                <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/mypage">Mypage</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-auto mb-2 mb-xl-0">
+                    <li class="nav-item">
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form action="/home" method="POST">
+        <br>
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" name="title" id="formControlInput" placeholder="Hello, World!">
+        <br>
+        <textarea name="detail"></textarea>
+        <script>
+            var easyMDE = new EasyMDE();
+        </script>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Create">
+    </form>
+</div>
+{% endblock %}
