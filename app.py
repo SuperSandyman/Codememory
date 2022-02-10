@@ -14,13 +14,13 @@ app = Flask(__name__, static_folder="assets")
 app.register_blueprint(setBrueprint.static)
 app.register_blueprint(setBrueprint.img)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///memo.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'database'
 db = SQLAlchemy(app)
 
-AUTH0_CLIENT_ID = 'bc9VXejShx5SNXHgw6C8vEjAe0NDIdS0'
-AUTH0_CLIENT_SECRET = 'AjVILJrIhfqfMz2-k_ptfNBiNYz-sAtGkmvwYZo0i-gPoOVvjP7sndD5T-lHp-Ko'
-AUTH0_DOMAIN = 'codememory.jp.auth0.com'
-app.secret_key = 'jfjar4oodljfoaurae4owuojdlf'
+AUTH0_CLIENT_ID = 'client_id'
+AUTH0_CLIENT_SECRET = 'client_secret'
+AUTH0_DOMAIN = 'domain'
+app.secret_key = 'secret_key'
 
 oauth = flask_oauthlib.client.OAuth(app)
 
